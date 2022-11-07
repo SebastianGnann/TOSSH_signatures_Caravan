@@ -35,10 +35,10 @@ end
 % First, we need to download and extract the Caravan data from:
 % https://zenodo.org/record/6647189
 path = 'D:/Data/Caravan/';
-dataset_list = ["camels", "camelsaus"]; %, "camelsbr"', ...
-    %"camelscl", "camelsgb", "hysets", "lamah"];
+dataset_list = ["camels", "camelsaus", "camelsbr"', ...
+    "camelscl", "camelsgb", "hysets", "lamah"];
 
-for i = 1:2 %7
+for i = 1:7
     
     % Define dataset name
     dataset_name = dataset_list(i);
@@ -56,7 +56,10 @@ for i = 1:2 %7
 
 
     table_tmp = join(attributes,signatures);
-    if i>1
+    
+    if i==1
+        complete_table = table_tmp;
+    elseif i>1
         complete_table = [complete_table; table_tmp];
     end
     
@@ -69,5 +72,16 @@ end
 
 writetable(complete_table,'complete_table.csv')
 
-% Plot results
+% todo: make sure that timeseries of P and Q match
 
+%% Plot results
+figure;
+scatter(complete_table.ari_ix_sav,complete_table.run_mm_syr./complete_table.pre_mm_syr)
+% caxis([0 10])
+scatter(complete_table.slp_dg_sav,complete_table.BFI)
+set(gca,'xscale','log')
+ind = complete_table.moisture_index>0;
+cor = corr(complete_table.slp_dg_sav(ind), complete_table.BFI(ind), ...
+    'type', 'Spearman', 'rows','complete')
+% cor = partialcorr(complete_table.slp_dg_sav, complete_table.BFI, ...
+%     complete_table.frac_snow, 'type', 'Spearman', 'rows','complete')
