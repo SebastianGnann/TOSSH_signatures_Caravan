@@ -55,6 +55,10 @@ P = cell(len,1); % precipitation
 PET = cell(len,1); % potential evapotranspiration
 Q = cell(len,1); % streamflow
 T = cell(len,1); % temperature
+Pmean = nan(len,1); % precipitation
+PETmean = nan(len,1); % potential evapotranspiration
+Qmean = nan(len,1); % streamflow
+Tmean = nan(len,1); % temperature
 
 
 fprintf('Loading catchment timeseries data...\n')
@@ -78,6 +82,11 @@ for i = 1:len % loop over all catchments
     % temperature_2m_mean
     T{i} = tmp_table.temperature_2m_mean;
     
+    PETmean(i) = mean(PET{i},'omitnan');
+    Qmean(i) = mean(Q{i},'omitnan');
+    Pmean(i) = mean(P{i},'omitnan');
+    Tmean(i) = mean(T{i},'omitnan');
+    
 end
 
 % add hydro-meteorological time series to struct file
@@ -86,6 +95,11 @@ timeseries.P = P;
 timeseries.PET = PET;
 timeseries.Q = Q;
 timeseries.T = T;
+
+attributes.Pmean = Pmean;
+attributes.PETmean = PETmean;
+attributes.Qmean = Qmean;
+attributes.Tmean = Tmean;
 
 % save the struct file
 if save_struct
