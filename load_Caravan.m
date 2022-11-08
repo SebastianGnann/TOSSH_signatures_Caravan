@@ -109,6 +109,8 @@ parcor = partialcorr(complete_table.slp_dg_sav,complete_table.BFI,100./complete_
 parcor = partialcorr(complete_table.slp_dg_sav,complete_table.BFI,complete_table.Tmean,'type','Spearman','rows','complete')
 
 figure; hold on
-scatter(100./complete_table.ari_ix_sav,complete_table.slp_dg_sav)
-cor = corr(100./complete_table.ari_ix_sav,complete_table.slp_dg_sav,'type','Spearman','rows','complete')
-xlim([0 5])
+scatter(100./complete_table.ari_ix_sav,complete_table.BFI.*complete_table.TotalRR, 5)
+% cor = corr(100./complete_table.ari_ix_sav,complete_table.RLD,'type','Spearman','rows','complete')
+xlim([0.1 10])
+ylim([0 1])
+set(gca,'xscale','log')
