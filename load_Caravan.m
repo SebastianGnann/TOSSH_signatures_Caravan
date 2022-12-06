@@ -41,6 +41,7 @@ end
 % https://zenodo.org/record/6647189
 path = 'D:/Data/Caravan/';
 dataset_list = ["camels", "camelsaus", "camelsbr", "camelscl", "camelsgb", "hysets", "lamah"];
+%dataset_list = ["hysets"];
 
 for i = 1:7
     
@@ -74,7 +75,9 @@ for i = 1:7
     
 end
 
-%writetable(complete_table,'complete_table.csv')
+complete_table.FDC = [];
+complete_table.FDC_error_str = [];
+writetable(complete_table,'Caravan/complete_table.csv')
 
 % todo: make sure that timeseries of P and Q match
 
@@ -98,10 +101,12 @@ ylim([-0.5 1])
 % set(gca,'xscale','log')
 
 figure; hold on
-scatter(complete_table.slp_dg_sav,complete_table.BFI,25,100./complete_table.ari_ix_sav,'filled')
+scatter(complete_table.slp_dg_sav,complete_table.BFI,25,complete_table.frac_snow,'filled')
 xlabel('Slope'); ylabel('BFI')
 colorbar;
-caxis([0 2]);
+caxis([0 0.5]);
+xlim([0.1 1000])
+ylim([0 1])
 set(gca,'xscale','log')
 cor = corr(complete_table.slp_dg_sav,complete_table.BFI,'type','Spearman','rows','complete')
 parcor = partialcorr(complete_table.slp_dg_sav,complete_table.BFI,complete_table.frac_snow,'type','Spearman','rows','complete')

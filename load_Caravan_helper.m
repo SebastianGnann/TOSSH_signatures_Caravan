@@ -59,6 +59,7 @@ Pmean = nan(len,1); % precipitation
 PETmean = nan(len,1); % potential evapotranspiration
 Qmean = nan(len,1); % streamflow
 Tmean = nan(len,1); % temperature
+flow_perc_complete = nan(len,1); % completeness of streamflow record
 
 
 fprintf('Loading catchment timeseries data...\n')
@@ -87,6 +88,8 @@ for i = 1:len % loop over all catchments
     Pmean(i) = mean(P{i},'omitnan');
     Tmean(i) = mean(T{i},'omitnan');
     
+    flow_perc_complete(i) = 100*(1-sum(isnan(Q{i}))./length(Q{i}));
+    
 end
 
 % add hydro-meteorological time series to struct file
@@ -100,6 +103,7 @@ attributes.Pmean = Pmean;
 attributes.PETmean = PETmean;
 attributes.Qmean = Qmean;
 attributes.Tmean = Tmean;
+attributes.flow_perc_complete = flow_perc_complete;
 
 % save the struct file
 if save_struct
