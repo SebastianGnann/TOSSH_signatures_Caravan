@@ -1,2 +1,2 @@
 # Caravan
-Loads Caravan (https://zenodo.org/record/7387919) data into Matlab and calculates hydrological signatures using TOSSH (https://github.com/TOSSHtoolbox/TOSSH).
+Loads Caravan data (https://zenodo.org/record/7387919; see here for paper: https://eartharxiv.org/repository/view/3345/) into Matlab and calculates hydrological signatures using TOSSH (https://github.com/TOSSHtoolbox/TOSSH).

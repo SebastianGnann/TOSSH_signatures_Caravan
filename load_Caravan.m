@@ -36,6 +36,13 @@ else
     error('TOSSH toolbox needed. Can be downloaded from https://github.com/TOSSHtoolbox and should be in a folder named TOSSH in the same directory.')
 end
 
+% Add BrewerMap package.
+if (exist('BrewerMap') == 7)
+    addpath(genpath('BrewerMap'));
+else
+    error('BrewerMap toolbox needed. Can be downloaded from https://github.com/DrosteEffect/BrewerMap and should be in a folder named BrewerMap in the same directory.')
+end
+
 %% Caravan data
 % First, we need to download and extract the Caravan data from:
 % https://zenodo.org/record/6647189
@@ -119,3 +126,15 @@ scatter(100./complete_table.ari_ix_sav,complete_table.BFI.*complete_table.TotalR
 xlim([0.1 10])
 ylim([0 1])
 set(gca,'xscale','log')
+
+%%
+
+figure; hold on
+scatter(complete_table.SeasonalTranslation_1(complete_table.frac_snow<0.05),...
+    complete_table.SeasonalTranslation_2(complete_table.frac_snow<0.05),25,...
+    complete_table.seasonality(complete_table.frac_snow<0.05),'filled')
+xlabel('x'); ylabel('x')
+colorbar;
+caxis([0 2]);
+xlim([0 2])
+ylim([0 365])
