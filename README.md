@@ -3,7 +3,11 @@
 This repository contains code that loads Caravan (a global large-sample catchment dataset; https://www.nature.com/articles/s41597-023-01975-w) into Matlab and calculates hydrological signatures using the TOSSH toolbox (https://github.com/TOSSHtoolbox/TOSSH).
 The signatures are saved as CSV file (results/TOSSH_signatures_Caravan.csv), together with catchment attributes from Caravan.
 This allows for easy identification of the catchments and facilitates straightforward analyses, e.g. between catchment attributes and hydrological signatures. 
-The CSV file can also be accessed here: https://zenodo.org/record/7763180
+
+
+### Link to file with TOSSH signatures for Caravan catchments
+
+https://zenodo.org/record/7763180
 
 ### Link to Caravan data
 
