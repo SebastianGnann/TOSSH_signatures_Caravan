@@ -18,7 +18,7 @@ clc
 
 %% Data location and directories
 % Add the Caravan repository to the Matlab paths. 
-mydir = 'Caravan';
+mydir = 'TOSSH_signatures_Caravan';
 addpath(genpath(mydir));
 
 % The resulting files will be stored in a folder named "results". If this
