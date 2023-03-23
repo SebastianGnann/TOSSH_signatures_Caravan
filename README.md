@@ -1,25 +1,22 @@
 # Hydrological signatures for Caravan using TOSSH
 
-This repository contains code that loads Caravan (a global large-sample catchment dataset) into Matlab and calculates hydrological signatures using the TOSSH toolbox (https://github.com/TOSSHtoolbox/TOSSH).
+This repository contains code that loads Caravan (a global large-sample catchment dataset; https://www.nature.com/articles/s41597-023-01975-w) into Matlab and calculates hydrological signatures using the TOSSH toolbox (https://github.com/TOSSHtoolbox/TOSSH).
 The signatures are saved as CSV file (results/TOSSH_signatures_Caravan.csv), together with catchment attributes from Caravan.
-This allows for easy identification of the catchments and facilitates straightforward analyses, e.g. between catchment attributes and hydrological signatures.
+This allows for easy identification of the catchments and facilitates straightforward analyses, e.g. between catchment attributes and hydrological signatures. 
+The CSV file can also be accessed here: 10.5281/zenodo.7763180
 
-### Link to data
+### Link to Caravan data
 
 https://zenodo.org/record/7540792
 
-### References
-
-Kratzert, F., Nearing, G., Addor, N., Erickson, T., Gauch, M., Gilon, O., ... & Matias, Y. (2023). Caravan-A global community dataset for large-sample hydrology. Scientific Data, 10(1), 61. https://www.nature.com/articles/s41597-023-01975-w
-
 ### License
 Caravan is published under the CC-BY-4.0 license. 
-
 This repository including the calculated signatures are therefore also published under the CC-BY-4.0 license.
-
-
 Note that Caravan consists of multiple source datasets including ERA5, HydroATLAS, multiple CAMELS datasets (US, Chile, Great Britain, Brazil, Australia), LamaH-CE, and HYSETS.
 
+### References
+
+Kratzert, F., Nearing, G., Addor, N., Erickson, T., Gauch, M., Gilon, O., ... & Matias, Y. (2023). Caravan-A global community dataset for large-sample hydrology. Scientific Data, 10(1), 61.
 
 Muñoz Sabater, J. (2019). ERA5-Land hourly data from 1981 to present. Copernicus Climate Change Service (C3S) Climate Data Store (CDS), 10(10.24381).
 

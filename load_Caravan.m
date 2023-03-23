@@ -66,7 +66,7 @@ for i = 1:7
 
     table_tmp = join(attributes,signatures);
     
-    if exist('complete_table', 'var')
+    if exist('TOSSH_signatures_Caravan', 'var')
         TOSSH_signatures_Caravan = [TOSSH_signatures_Caravan; table_tmp];
     else
         TOSSH_signatures_Caravan = table_tmp;
@@ -82,31 +82,23 @@ end
 % remove FDC to save space
 TOSSH_signatures_Caravan.FDC = [];
 TOSSH_signatures_Caravan.FDC_error_str = [];
-writetable(TOSSH_signatures_Caravan,'./results/TOSSH_signatures_Caravan.csv')
+writetable(TOSSH_signatures_Caravan,'TOSSH_signatures_Caravan/results/TOSSH_signatures_Caravan.csv')
 
 %% Plot results
 % test calculation
 figure; hold on
-histogram(TOSSH_signatures_Caravan.Pmean.*365)
-histogram(TOSSH_signatures_Caravan.p_mean.*365)
+scatter(TOSSH_signatures_Caravan.Pmean.*365,TOSSH_signatures_Caravan.p_mean.*365)
+plot(0:3000, 0:3000, 'k-')
 
 % make Budyko-type figure
 figure; hold on
-scatter(TOSSH_signatures_Caravan.PET/TOSSH_signatures_Caravan.P,1-TOSSH_signatures_Caravan.TotalRR,5)
-xlabel('PET/P'); ylabel('1-Q/P')
-plot(0.001:0.001:1,0.001:0.001:1,'k-')
-plot(1:100,ones(size(1:100)),'k-')
-plot(0.001:100,zeros(size(0.001:100)),'k--')
-xlim([0 5])
-ylim([-0.5 1])
-% set(gca,'xscale','log')
-
-figure; hold on
+scatter(TOSSH_signatures_Caravan.PETmean./TOSSH_signatures_Caravan.Pmean,1-TOSSH_signatures_Caravan.TotalRR,5)
 scatter(100./TOSSH_signatures_Caravan.ari_ix_sav,1-TOSSH_signatures_Caravan.TotalRR,5)
 xlabel('PET/P'); ylabel('1-Q/P')
 plot(0.001:0.001:1,0.001:0.001:1,'k-')
 plot(1:100,ones(size(1:100)),'k-')
 plot(0.001:100,zeros(size(0.001:100)),'k--')
 xlim([0 5])
-ylim([-0.5 1])
+ylim([-0.5 1.1])
+legend('ERA5 Aridity','HydroATLAS Aridity','location','southeast')
 % set(gca,'xscale','log')
