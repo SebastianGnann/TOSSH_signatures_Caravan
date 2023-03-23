@@ -1,16 +1,14 @@
-%% load_Caravan - saves ...
+%% load_Caravan - calculation of signatures for Caravan catchments
 %
 %   This script loads Caravan data, calculates mean fluxes and hydrological
 %   signatures, and saves it as csv file.
 %   
 %   References
-%   Kratzert, Frederik, Nearing, Grey, Addor, Nans, Erickson, Tyler, Gauch, 
-%   Martin, Gilon, Oren, Gudmundsson, Lukas, Hassidim, Avinatan, Klotz, 
-%   Daniel, Nevo, Sella, Shalev, Guy, & Matias, Yossi. (2022). Caravan - A 
-%   global community dataset for large-sample hydrology (0.4) [Data set]. 
-%   Zenodo. https://doi.org/10.5281/zenodo.6647189
+%   Kratzert, F., Nearing, G., Addor, N., Erickson, T., Gauch, M., Gilon, 
+%   O., ... & Matias, Y. (2023). Caravan-A global community dataset for 
+%   large-sample hydrology. Scientific Data, 10(1), 61.
 %
-%   Copyright (C) 2022
+%   Copyright (C) 2023
 %   This software is distributed under the GNU Public License Version 3.
 %   See <https://www.gnu.org/licenses/gpl-3.0.en.html> for details.
 
@@ -45,7 +43,7 @@ end
 
 %% Caravan data
 % First, we need to download and extract the Caravan data from:
-% https://zenodo.org/record/6647189
+% https://zenodo.org/record/7540792
 path = 'D:/Data/Caravan/';
 dataset_list = ["camels", "camelsaus", "camelsbr", "camelscl", "camelsgb", "hysets", "lamah"];
 %dataset_list = ["hysets"];
@@ -59,7 +57,6 @@ for i = 1:7
     [attributes, timeseries] = load_Caravan_helper(path, dataset_name);
 
     % Calculate signatures
-%     signatures = calc_BasicSet(timeseries.Q, timeseries.t);
     signatures = calc_All(...
        timeseries.Q, timeseries.t, timeseries.P, timeseries.PET, timeseries.T);
     % Make table with IDs
@@ -70,9 +67,9 @@ for i = 1:7
     table_tmp = join(attributes,signatures);
     
     if exist('complete_table', 'var')
-        complete_table = [complete_table; table_tmp];
+        TOSSH_signatures_Caravan = [TOSSH_signatures_Caravan; table_tmp];
     else
-        complete_table = table_tmp;
+        TOSSH_signatures_Caravan = table_tmp;
     end
     
     % Free memory
@@ -82,23 +79,20 @@ for i = 1:7
     
 end
 
-complete_table.FDC = [];
-complete_table.FDC_error_str = [];
-writetable(complete_table,'Caravan/complete_table.csv')
-
-% todo: make sure that timeseries of P and Q match
+% remove FDC to save space
+TOSSH_signatures_Caravan.FDC = [];
+TOSSH_signatures_Caravan.FDC_error_str = [];
+writetable(TOSSH_signatures_Caravan,'./Data/TOSSH_signatures_Caravan.csv')
 
 %% Plot results
+% test calculation
 figure; hold on
-histogram(complete_table.PETmean.*365)
-histogram(complete_table.pet_mean.*365)
-figure; hold on
-histogram(complete_table.Pmean.*365)
-histogram(complete_table.p_mean.*365)
+histogram(TOSSH_signatures_Caravan.Pmean.*365)
+histogram(TOSSH_signatures_Caravan.p_mean.*365)
 
+% make Budyko-type figure
 figure; hold on
-scatter(complete_table.aridity,1-complete_table.Q_mean./complete_table.p_mean,5)
-scatter(100./complete_table.ari_ix_sav,1-complete_table.Qmean./complete_table.Pmean,5)
+scatter(TOSSH_signatures_Caravan.PET/TOSSH_signatures_Caravan.P,1-TOSSH_signatures_Caravan.TotalRR,5)
 xlabel('PET/P'); ylabel('1-Q/P')
 plot(0.001:0.001:1,0.001:0.001:1,'k-')
 plot(1:100,ones(size(1:100)),'k-')
@@ -108,33 +102,11 @@ ylim([-0.5 1])
 % set(gca,'xscale','log')
 
 figure; hold on
-scatter(complete_table.slp_dg_sav,complete_table.BFI,25,complete_table.frac_snow,'filled')
-xlabel('Slope'); ylabel('BFI')
-colorbar;
-caxis([0 0.5]);
-xlim([0.1 1000])
-ylim([0 1])
-set(gca,'xscale','log')
-cor = corr(complete_table.slp_dg_sav,complete_table.BFI,'type','Spearman','rows','complete')
-parcor = partialcorr(complete_table.slp_dg_sav,complete_table.BFI,complete_table.frac_snow,'type','Spearman','rows','complete')
-parcor = partialcorr(complete_table.slp_dg_sav,complete_table.BFI,100./complete_table.ari_ix_sav,'type','Spearman','rows','complete')
-parcor = partialcorr(complete_table.slp_dg_sav,complete_table.BFI,complete_table.Tmean,'type','Spearman','rows','complete')
-
-figure; hold on
-scatter(100./complete_table.ari_ix_sav,complete_table.BFI.*complete_table.TotalRR, 5)
-% cor = corr(100./complete_table.ari_ix_sav,complete_table.RLD,'type','Spearman','rows','complete')
-xlim([0.1 10])
-ylim([0 1])
-set(gca,'xscale','log')
-
-%%
-
-figure; hold on
-scatter(complete_table.SeasonalTranslation_1(complete_table.frac_snow<0.05),...
-    complete_table.SeasonalTranslation_2(complete_table.frac_snow<0.05),25,...
-    complete_table.seasonality(complete_table.frac_snow<0.05),'filled')
-xlabel('x'); ylabel('x')
-colorbar;
-caxis([0 2]);
-xlim([0 2])
-ylim([0 365])
+scatter(100./TOSSH_signatures_Caravan.ari_ix_sav,1-TOSSH_signatures_Caravan.TotalRR,5)
+xlabel('PET/P'); ylabel('1-Q/P')
+plot(0.001:0.001:1,0.001:0.001:1,'k-')
+plot(1:100,ones(size(1:100)),'k-')
+plot(0.001:100,zeros(size(0.001:100)),'k--')
+xlim([0 5])
+ylim([-0.5 1])
+% set(gca,'xscale','log')

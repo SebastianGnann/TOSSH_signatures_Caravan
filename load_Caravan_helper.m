@@ -1,8 +1,9 @@
 function [attributes, timeseries] = ...
     load_Caravan_helper(path, dataset_name, save_struct)
-%saveCAMELSstruct_AUS Creates struct file with CAMELS AUS data.
+%load_Caravan_helper Creates struct file with Caravan data.
 %   - Loads hydro-meteorological time series and catchment attributes
-%   - Timeseries are loaded for the period in which all data are available 
+%   - Time series are loaded for the period in which all data are available 
+%   - Time series can optionally be saved
 %
 %   INPUT
 %   path: Caravan data path
@@ -13,7 +14,7 @@ function [attributes, timeseries] = ...
 %   attributes: struct file with attribute data
 %   timeseries: struct file with timeseries data
 %
-%   Copyright (C) 2022
+%   Copyright (C) 2023
 %   This software is distributed under the GNU Public License Version 3.
 %   See <https://www.gnu.org/licenses/gpl-3.0.en.html> for details.
 
@@ -43,8 +44,13 @@ attributes_hydroatlas = readtable(...
     strcat(path_attributes,'attributes_hydroatlas_',dataset_name,'.csv'),...
     'ReadVariableNames',true);
 
+attributes_other = readtable(...
+    strcat(path_attributes,'attributes_other_',dataset_name,'.csv'),...
+    'ReadVariableNames',true);
+
 % merge attributes
-attributes = join(attributes_caravan,attributes_hydroatlas);
+attributes = join(attributes_other,attributes_caravan);
+attributes = join(attributes, attributes_hydroatlas);
 
 %% Load hydro-meteorological time series
 % To extract the time series, we loop over all catchments. 
@@ -60,7 +66,6 @@ PETmean = nan(len,1); % potential evapotranspiration
 Qmean = nan(len,1); % streamflow
 Tmean = nan(len,1); % temperature
 flow_perc_complete = nan(len,1); % completeness of streamflow record
-
 
 fprintf('Loading catchment timeseries data...\n')
 for i = 1:len % loop over all catchments
@@ -105,10 +110,9 @@ attributes.Qmean = Qmean;
 attributes.Tmean = Tmean;
 attributes.flow_perc_complete = flow_perc_complete;
 
-% save the struct file
+% optionally save the struct file
 if save_struct
-    % todo: update name
-    save('Caravan/Data/timeseries.mat','-struct','timeseries')
+    save('./Data/timeseries.mat','-struct','timeseries')
 end
 
 end
