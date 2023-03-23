@@ -21,10 +21,10 @@ clc
 mydir = 'Caravan';
 addpath(genpath(mydir));
 
-% The resulting files will be stored in a folder named "Data". If this
+% The resulting files will be stored in a folder named "results". If this
 % folder does not exist yet, we have to create it.
-if ~(exist(strcat(mydir,'/Data')) == 7)
-    mkdir (strcat(mydir,'/Data'))
+if ~(exist(strcat(mydir,'/results')) == 7)
+    mkdir (strcat(mydir,'/results'))
 end
 
 % Add TOSSH to path.
@@ -44,7 +44,7 @@ end
 %% Caravan data
 % First, we need to download and extract the Caravan data from:
 % https://zenodo.org/record/7540792
-path = 'D:/Data/Caravan/';
+path = 'D:/Data/Caravan/'; % replace with local path
 dataset_list = ["camels", "camelsaus", "camelsbr", "camelscl", "camelsgb", "hysets", "lamah"];
 %dataset_list = ["hysets"];
 
@@ -82,7 +82,7 @@ end
 % remove FDC to save space
 TOSSH_signatures_Caravan.FDC = [];
 TOSSH_signatures_Caravan.FDC_error_str = [];
-writetable(TOSSH_signatures_Caravan,'./Data/TOSSH_signatures_Caravan.csv')
+writetable(TOSSH_signatures_Caravan,'./results/TOSSH_signatures_Caravan.csv')
 
 %% Plot results
 % test calculation

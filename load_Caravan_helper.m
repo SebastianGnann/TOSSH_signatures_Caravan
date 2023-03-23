@@ -112,7 +112,7 @@ attributes.flow_perc_complete = flow_perc_complete;
 
 % optionally save the struct file
 if save_struct
-    save('./Data/timeseries.mat','-struct','timeseries')
+    save('./results/timeseries.mat','-struct','timeseries')
 end
 
 end
